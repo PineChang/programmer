@@ -7,12 +7,23 @@
  * Description：
  */
 
+//var AV = require('avoscloud-sdk').AV;
+//
+//AV.initialize('Qis1w7VaxtwbwYTtA57alJOq-gzGzoHsz', 'EANWnW9dUT0gDSYYtaNrpDrQ','zcjL0d7t7BrFr8K04UlpTLRv');
+//AV.Promise.setPromisesAPlusCompliant(true);
+
+
 import React from 'react';
 var Dimensions = require('Dimensions');
 //var Orientation = require('react-native-orientation');
 import Sider from './view/side_menu/sider';
 
+
+
+
 import Utils from './util/Utils';
+import TranslationRecord from './model/TranslationRecord';
+
 
 
 //这里实在是迫不得已，在navigationView里面的this指针都会转向Drawer
