@@ -7,60 +7,42 @@
  * Description：
  */
 
-//var AV = require('avoscloud-sdk').AV;
-//
-//AV.initialize('Qis1w7VaxtwbwYTtA57alJOq-gzGzoHsz', 'EANWnW9dUT0gDSYYtaNrpDrQ','zcjL0d7t7BrFr8K04UlpTLRv');
-//AV.Promise.setPromisesAPlusCompliant(true);
-
 
 import React from 'react';
 var Dimensions = require('Dimensions');
-//var Orientation = require('react-native-orientation');
-import Sider from './view/side_menu/sider';
 
+import Sider from './view/side_menu/sider';
+import UsetInfo from './view/user_center/UserInfo';
+import TranslationRecord from './view/translate/TransLateRecord';
 
 import Utils from './util/Utils';
-import TranslationRecord from './model/TranslationRecord';
-
+import TRModel from './model/TranslationRecord';
 
 //这里实在是迫不得已，在navigationView里面的this指针都会转向Drawer
-var __navigator = null;
+var _nav = null;
 
 import {
     StyleSheet,
     Text,
     View,
     DrawerLayoutAndroid,
+    BackAndroid,
+    Navigator,
     TextInput,
+    TouchableOpacity
 } from 'react-native';
 
 
-class Root extends React.Component {
+class Main extends React.Component {
+
 
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {input: ''};
-        __navigator = this.props.navigator;
+        this.state = {input: '', value: 1, drawer: "close", offsetY: 0};
+        _nav = this.props.navigator;
     }
-
-
-    componentWillMount() {
-        // 判断横竖屏幕
-        //var initial = Orientation.getInitialOrientation();
-        //if (initial === 'PORTRAIT') {
-        //    //do stuff
-        //} else {
-        //    //do other stuff
-        //}
-
-        // 只允许竖屏
-        //Orientation.lockToPortrait();
-        //只允许横屏
-        //Orientation.lockToLandscape();
-    }
-
 
     getValue(text) {
         var RootThis = this;
@@ -75,45 +57,30 @@ class Root extends React.Component {
                 'Content-Type': 'application/json'
             }
         }).then(function (response) {
-            //console.log("response:" + JSON.stringify(response));
             var reslutJson = response.json();
             return reslutJson ? reslutJson : "";
         }).then(function (responseText) {
-            //console.log("responseText:" + JSON.stringify(responseText));
             RootThis.setState({
                 input: responseText.translation
             });
-            RootThis.addTranslateRecord(text, responseText.translation);
+            TRModel.addTranslateRecord(text, responseText.translation);
         });
     }
 
-    addTranslateRecord(word, translate) {
-        console.log('word:' + word + "<>translate:" + translate);
-        fetch(Utils.LEANCLOUD_SERVCE + 'translate/addTranslateRecord', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({word: word, translate: translate})
-        }).then(function (result) {
-            console.log('result->' + result);
-        }).catch(function (error) {
-            console.log('error->' + error);
-        });
-    }
 
     navigationView() {
         return (
-            <Sider navi={__navigator}/>
+            <Sider navigator={_nav}/>
         );
     }
 
     render() {
         return (
-            <DrawerLayoutAndroid drawerWidth={300}
-                                 drawerPosition={DrawerLayoutAndroid.positions.Left}
-                                 renderNavigationView={(()=>{return this.navigationView})()}>
+            <DrawerLayoutAndroid
+                ref={(drawer)=>this._drawer = drawer}
+                drawerWidth={300}
+                drawerPosition={DrawerLayoutAndroid.positions.Left}
+                renderNavigationView={(()=>{return this.navigationView})()}>
                 <View style={styles.flexContainer}>
                     <View style={styles.titleView}>
                         <Text style={styles.titleText}>云翻译</Text>
@@ -132,6 +99,112 @@ class Root extends React.Component {
         );
     }
 }
+
+
+// 导航栏的Mapper
+var NavigationBarRouteMapper = {
+    // 左键
+    LeftButton(route, navigator, index, navState) {
+        if (index > 0) {
+            return (
+                <View style={styles.navContainer}>
+                    <TouchableOpacity
+                        underlayColor='transparent'
+                        onPress={() => {if (index > 0) {navigator.pop()}}}>
+                        <Text style={styles.leftNavButtonText}>
+                            后退
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        } else {
+            return null;
+        }
+    },
+    // 右键
+    RightButton(route, navigator, index, navState) {
+        if (route.onPress)
+            return (
+                <View style={styles.navContainer}>
+                    <TouchableOpacity
+                        onPress={() => route.onPress()}>
+                        <Text style={styles.rightNavButtonText}>
+                            {route.rightText || '右键'}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            );
+    },
+    // 标题
+    Title(route, navigator, index, navState) {
+        return (
+            <View style={styles.navContainer}>
+                <Text style={styles.title}>
+                    应用标题
+                </Text>
+            </View>
+        );
+    }
+};
+
+
+class Root extends React.Component {
+
+
+    configureScene(route, routeStack) {
+        if (route.type == 'Modal') {
+            return Navigator.SceneConfigs.FloatFromBottom;
+        }
+        return Navigator.SceneConfigs.PushFromRight;
+    }
+
+
+
+    /**
+     * 使用动态页面加载
+     * @param route 路由
+     * @param navigator 导航器
+     * @returns {XML} 页面
+     */
+    renderScene(route, navigator) {
+        console.log("renderScene-->name:" + route.name);
+        return <route.component navigator={navigator}/>;
+    }
+
+
+    //renderScene(router, navigator) {
+    //    console.log("renderScene-->name:" + router.name);
+    //    var Component = null;
+    //    switch (router.name) {
+    //        case "welcome":
+    //            Component = UsetInfo;
+    //            break;
+    //        default: //default view
+    //            Component = Main;
+    //    }
+    //
+    //    return <Component navigator={navigator}/>
+    //}
+
+
+    render() {
+        return (
+            <Navigator
+                style={{flex:1}}
+                initialRoute={{component:Main}}
+                configureScene={this.configureScene}
+                renderScene={this.renderScene}
+                //navigationBar={
+                //          <Navigator.NavigationBar
+                //          style={styles.navContainer}
+                //          routeMapper={NavigationBarRouteMapper}/>
+                //}
+            />
+        );
+    }
+
+}
+;
 
 
 const styles = StyleSheet.create({
@@ -173,6 +246,58 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 5
     },
+    // 页面框架
+    container: {
+        flex: 4,
+        marginTop: 100,
+        flexDirection: 'column'
+    },
+    // 导航栏
+    navContainer: {
+        backgroundColor: '#81c04d',
+        paddingTop: 12,
+        paddingBottom: 10,
+    },
+    // 导航栏文字
+    headText: {
+        color: '#ffffff',
+        fontSize: 22
+    },
+    // 按钮
+    button: {
+        height: 60,
+        marginTop: 10,
+        justifyContent: 'center', // 内容居中显示
+        backgroundColor: '#ff1049',
+        alignItems: 'center'
+    },
+    // 按钮文字
+    buttonText: {
+        fontSize: 18,
+        color: '#ffffff'
+    },
+    // 左面导航按钮
+    leftNavButtonText: {
+        color: '#ffffff',
+        fontSize: 18,
+        marginLeft: 13
+    },
+    // 右面导航按钮
+    rightNavButtonText: {
+        color: '#ffffff',
+        fontSize: 18,
+        marginRight: 13
+    },
+    // 标题
+    title: {
+        fontSize: 18,
+        color: '#fff',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
+        flex: 1                //Step 3
+    }
 });
 
 export default Root;

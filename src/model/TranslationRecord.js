@@ -7,20 +7,26 @@
  * Description：
  */
 
-//var AV = require('avoscloud-sdk').AV;
-//
-//var TranslationRecordClass = AV.Object.extend('TranslationRecord');
 
 function TranslationRecord() {
 }
 
 
-TranslationRecord.addTranslationRecord = function (content, result) {
-    //var tr = new TranslationRecordClass();
-    //tr.set('content', content);
-    //tr.set('result', result);
-    //tr.save();
+TranslationRecord.addTranslateRecord = function (word, translate) {
+    console.log('word:' + word + "<>translate:" + translate);
+    fetch(Utils.LEANCLOUD_SERVCE + 'translate/addTranslateRecord', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({word: word, translate: translate})
+    }).then(function (result) {
+        console.log('result->' + result);
+    }).catch(function (error) {
+        console.log('error->' + error);
+    });
 };
 
 
-export default TranslationRecord;
+module.exports = TranslationRecord;

@@ -7,6 +7,10 @@
  * Description：
  */
 
+
+'use strict'; // 启用严格模式
+
+
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -27,9 +31,11 @@ class UserInfo extends Component {
                 <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>
                     Hello
                 </Text>
-                <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>
-                    World!
-                </Text>
+                <TouchableHighlight onPress={this.props.navigator.pop()}>
+                    <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>
+                        World!
+                    </Text>
+                </TouchableHighlight>
             </View>
         );
     }
