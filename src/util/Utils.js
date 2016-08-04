@@ -12,6 +12,6 @@ function Utils() {
 }
 
 Utils.YOUDAO_URL = 'http://fanyi.youdao.com/openapi.do?keyfrom=programmer&key=32622806&type=data&doctype=json&version=1.1&q=';
-
+Utils.LEANCLOUD_SERVCE = 'http://translateservce.leanapp.cn/';
 
 export default Utils;

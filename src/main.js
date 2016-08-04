@@ -19,11 +19,8 @@ var Dimensions = require('Dimensions');
 import Sider from './view/side_menu/sider';
 
 
-
-
 import Utils from './util/Utils';
 import TranslationRecord from './model/TranslationRecord';
-
 
 
 //这里实在是迫不得已，在navigationView里面的this指针都会转向Drawer
@@ -86,6 +83,23 @@ class Root extends React.Component {
             RootThis.setState({
                 input: responseText.translation
             });
+            RootThis.addTranslateRecord(text, responseText.translation);
+        });
+    }
+
+    addTranslateRecord(word, translate) {
+        console.log('word:' + word + "<>translate:" + translate);
+        fetch(Utils.LEANCLOUD_SERVCE + 'translate/addTranslateRecord', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({word: word, translate: translate})
+        }).then(function (result) {
+            console.log('result->' + result);
+        }).catch(function (error) {
+            console.log('error->' + error);
         });
     }
 
