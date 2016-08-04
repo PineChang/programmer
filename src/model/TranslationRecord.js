@@ -6,7 +6,7 @@
  * Time：
  * Description：
  */
-
+import Utils from '../util/Utils';
 
 function TranslationRecord() {
 }
