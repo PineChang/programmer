@@ -97,9 +97,11 @@ class Cell extends Component {
         //        };
         //        break;
         //}
-        console.log('navigator:' + _nav.toString());
+        //console.log('navigator:' + _nav.toString());
         this.props.navigator.push({name: 'TransLateRecord', component: TransLateRecord});
     }
+
+
 
     render() {
         let active = false;

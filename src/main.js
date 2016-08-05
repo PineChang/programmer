@@ -36,6 +36,13 @@ import {
 class Main extends React.Component {
 
 
+    static propTypes = {
+        title: PropTypes.string.isRequired,
+        onForward: PropTypes.func.isRequired,
+        onBack: PropTypes.func.isRequired,
+    }
+
+
     // 构造
     constructor(props) {
         super(props);
@@ -147,17 +154,14 @@ var NavigationBarRouteMapper = {
     }
 };
 
+var isFirst = true;
 
 class Root extends React.Component {
 
 
     configureScene(route, routeStack) {
-        if (route.type == 'Modal') {
-            return Navigator.SceneConfigs.FloatFromBottom;
-        }
         return Navigator.SceneConfigs.PushFromRight;
     }
-
 
 
     /**
@@ -168,7 +172,12 @@ class Root extends React.Component {
      */
     renderScene(route, navigator) {
         console.log("renderScene-->name:" + route.name);
-        return <route.component navigator={navigator}/>;
+        if (route.name) {
+            return <route.component navigator={navigator}/>;
+        } else if (isFirst && !route.name) {
+            isFirst = false;
+            return <route.component navigator={navigator}/>;
+        }
     }
 
 
@@ -190,8 +199,7 @@ class Root extends React.Component {
     render() {
         return (
             <Navigator
-                style={{flex:1}}
-                initialRoute={{component:Main}}
+                initialRoute={{ title: 'My Initial Scene'}}
                 configureScene={this.configureScene}
                 renderScene={this.renderScene}
                 //navigationBar={
@@ -204,7 +212,35 @@ class Root extends React.Component {
     }
 
 }
-;
+
+
+class SimpleNavigationApp extends React.Component {
+    render() {
+        return ( <Navigator
+            initialRoute={{title: 'My Initial Scene', index: 0 }}
+            renderScene={(route, navigator) =>
+            <Main title={route.title}
+
+                     // Function to call when a new scene should be displayed
+                     onForward={ () => {
+                     const nextIndex = route.index + 1;
+                     navigator.push({
+                           title: 'Scene ' + nextIndex,
+                           index: nextIndex,
+                         });
+                     }}
+
+                     // Function to call to go back to the previous scene
+                    onBack={() => {
+                          if (route.index > 0) {
+                                navigator.pop();
+                          }
+                        }
+                    }
+            />}
+        />)
+    }
+}
 
 
 const styles = StyleSheet.create({
@@ -300,4 +336,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Root;
+export default SimpleNavigationApp;

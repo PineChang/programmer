@@ -14,6 +14,8 @@ import {
 import style from './style';
 import List from './siderList'
 
+import UserInfo from '../user_center/UserInfo';
+
 var _nav = null;
 
 class sider extends Component {
@@ -41,6 +43,10 @@ class sider extends Component {
         this.setState({bilibili: true});
     }
 
+    _UserInfo() {
+        this.props.navigator.push({name: 'UserInfo', component: UserInfo});
+    }
+
     render() {
         return (
             <ScrollView style={style.container} showsVerticalScrollIndicator={false}>
@@ -49,7 +55,7 @@ class sider extends Component {
                             height:165
                 }}>
                     <View style={style.left}>
-                        <TouchableWithoutFeedback style={style.faceTouch}>
+                        <TouchableWithoutFeedback style={style.faceTouch} onPress={this._UserInfo.bind(this)}>
                             <View style={style.faceBorder}>
                                 <Image resizeMode={Image.resizeMode.contain} source={require('./img/face.jpg')}
                                        style={{borderRadius:70,width:70,height:70}}/>
