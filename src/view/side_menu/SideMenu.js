@@ -24,6 +24,8 @@ import {
     TouchableHighlight
 } from 'react-native';
 
+var Dimensions, {height, width} = require('Dimensions');
+
 import UserInfo from '../user_center/UserInfo';
 import AboutUs from '../user_center/AboutUs';
 import TranslationRecord from '../translate/TransLateRecord';
@@ -47,32 +49,53 @@ class SideMenu extends React.Component {
                     <Text style={{color:'#FFFFFF',fontSize:10,marginBottom: 20}}>————————————————</Text>
                 </View>
                 <View style={styles.sideContent}>
-                    <TouchableHighlight style={styles.sideMenu} onPress={() => this._onIndexClick(this.props)}>
-                        <Text style={styles.sideMenu}>
-                            首页
-                        </Text>
-                    </TouchableHighlight>
-
-                    <TouchableHighlight onPress={() => this._onUserInfoClick(this.props)}>
-                        <Text>
-                            我的资料
-                        </Text>
-                    </TouchableHighlight>
-
-                    <TouchableHighlight onPress={() => this._transLateRecordClick(this.props)}>
-                        <Text>
-                            翻译记录
-                        </Text>
-                    </TouchableHighlight>
-
-                    <TouchableHighlight onPress={() => this._aboutUsClick(this.props)}>
-                        <Text>
-                            关于我们
-                        </Text>
-                    </TouchableHighlight>
+                    <Menu navigator={this.props.navigator}
+                          closeDrawer={this.props.closeDrawer}
+                    />
                 </View>
             </View>);
     }
+
+
+}
+
+
+class Menu extends React.Component {
+    constructor(props) {
+        super(props);
+        // 初始状态
+        this.navigator = this.props.navigator;
+    }
+
+    render() {
+        return (<View>
+
+            <TouchableHighlight style={styles.sideTouchAble} onPress={() => this._onIndexClick(this.props)}>
+                <Text style={[styles.sideMenu,{fontSize:18}]}>
+                    首页
+                </Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight style={styles.sideTouchAble} onPress={() => this._onUserInfoClick(this.props)}>
+                <Text style={styles.sideMenu}>
+                    我的资料
+                </Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight style={styles.sideTouchAble} onPress={() => this._transLateRecordClick(this.props)}>
+                <Text style={styles.sideMenu}>
+                    翻译记录
+                </Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight style={styles.sideTouchAble} onPress={() => this._aboutUsClick(this.props)}>
+                <Text style={styles.sideMenu}>
+                    关于我们
+                </Text>
+            </TouchableHighlight>
+        </View>);
+    }
+
 
     _onUserInfoClick(props) {
         this.props.closeDrawer();
@@ -107,6 +130,7 @@ class SideMenu extends React.Component {
             })
         }
     }
+
 }
 
 
@@ -125,13 +149,24 @@ const styles = StyleSheet.create({
     sideContent: {
         flex: 1,
         flexDirection: 'column',
-        padding: 10,
-        justifyContent: 'space-between'
+        height: height,
+        padding: 5,
+        justifyContent: 'space-between',
+        borderBottomColor:'#E9724C',
+        borderBottomWidth:2
+    },
+    sideTouchAble: {
+        flex: 1,
+        //alignItems: 'center',
+        justifyContent:'center',
+        backgroundColor: '#FFC857',
+        margin: 3,
+        padding: 15,
+        borderRadius:5,
     },
     sideMenu: {
-        flex: 1,
-        color: '#F13D81',
-        fontSize: 15
+        color: '#F8F4E3',
+        fontSize: 15,
     }
     //Side style end
 });
