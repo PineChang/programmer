@@ -8,7 +8,7 @@ import {
     AppRegistry,
 } from 'react-native';
 
-import main from './src/main';
+import App from './src/App';
 
 
-AppRegistry.registerComponent('programmer', () => main);
+AppRegistry.registerComponent('programmer', () => App);

@@ -2,10 +2,12 @@
  * Created with WebStorm 10.0
  * User：苏国均
  * Version：1.0.0
- * Date：16/8/1
+ * Date：16/8/9
  * Time：
  * Description：
  */
+
+
 
 
 'use strict'; // 启用严格模式
@@ -25,7 +27,7 @@ import {
 } from 'react-native';
 
 
-class UserInfo extends Component {
+class AboutUs extends Component {
 
     constructor(props) {
         super(props);
@@ -54,7 +56,7 @@ class UserInfo extends Component {
                 </Text>
                 <TouchableHighlight onPress={() => this._onBackClick(this.props)}>
                     <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>
-                        World!
+                        关于我们
                     </Text>
                 </TouchableHighlight>
             </View>
@@ -62,4 +64,4 @@ class UserInfo extends Component {
     }
 }
 
-export default UserInfo;
+export default AboutUs;
