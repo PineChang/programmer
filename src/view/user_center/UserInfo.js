@@ -24,6 +24,7 @@ import {
     Picker,
 } from 'react-native';
 
+import BaseActionBar from '../public/BaseActionBar';
 
 class UserInfo extends Component {
 
@@ -49,6 +50,7 @@ class UserInfo extends Component {
     render() {
         return (
             <View style={{flex: 1, alignItems: 'center'}}>
+                <BaseActionBar navigator={this.props.navigator} title={'我的'}/>
                 <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>
                     Hello
                 </Text>

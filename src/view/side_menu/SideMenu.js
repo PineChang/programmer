@@ -31,6 +31,7 @@ import AboutUs from '../user_center/AboutUs';
 import TranslationRecord from '../translate/TransLateRecord';
 
 class SideMenu extends React.Component {
+
     //var nav;
     // 构造
     constructor(props) {
@@ -99,16 +100,16 @@ class Menu extends React.Component {
 
     _onUserInfoClick(props) {
         this.props.closeDrawer();
-    }
-
-    _onIndexClick(props) {
-        this.props.closeDrawer();
         if (props.navigator) {
             props.navigator.push({
                 name: 'UserInfo',
                 component: UserInfo
             })
         }
+    }
+
+    _onIndexClick(props) {
+        this.props.closeDrawer();
     }
 
     _transLateRecordClick(props) {
@@ -152,17 +153,17 @@ const styles = StyleSheet.create({
         height: height,
         padding: 5,
         justifyContent: 'space-between',
-        borderBottomColor:'#E9724C',
-        borderBottomWidth:2
+        borderBottomColor: '#E9724C',
+        borderBottomWidth: 2
     },
     sideTouchAble: {
         flex: 1,
         //alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
         backgroundColor: '#FFC857',
         margin: 3,
         padding: 15,
-        borderRadius:5,
+        borderRadius: 5,
     },
     sideMenu: {
         color: '#F8F4E3',

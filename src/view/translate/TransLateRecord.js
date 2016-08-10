@@ -21,8 +21,11 @@ import {
     TouchableHighlight
 } from 'react-native';
 
+var Dimensions, {height, width} = require('Dimensions');
 
 import Utils from '../../util/Utils';
+import BaseActionBar from '../public/BaseActionBar';
+
 
 class TransLateRecord extends React.Component {
 
@@ -53,26 +56,17 @@ class TransLateRecord extends React.Component {
             .done();
     }
 
-    _back() {
-        // this.props.navigator.pop();
-    }
-
     render() {
         if (!this.state.loaded) {
             return this.renderLoadingView();
         }
 
         return (
-            <View style={[styles.container, {flexDirection: 'column'}]}>
-                <TouchableHighlight onPress={this._back()}>
-                    <Text>
-                        返回
-                    </Text>
-                </TouchableHighlight>
-
+            <View style={{flexDirection: 'column'}}>
+                <BaseActionBar navigator={this.props.navigator} title={'翻译记录'}/>
                 <ListView
                     dataSource={this.state.dataSource}
-                    renderRow={this.renderMovie}
+                    renderRow={this.renderRecord}
                     style={styles.listView}
                 />
             </View>
@@ -80,30 +74,35 @@ class TransLateRecord extends React.Component {
     }
 
     renderLoadingView() {
-        return (<View style={styles.container}>
-                <Text>Loading movies......</Text>
-            </View>
-        );
-    }
-
-    renderMovie(record) {
         return (
-            <View style={styles.container}>
-                <Image
-                    source={{uri: 'http://pic3.nipic.com/20090622/2605630_113023052_2.jpg'}}
-                    style={styles.thumbnail}
-                />
-                <View style={styles.rightContainer}>
-                    <Text style={styles.title}>{record.word}</Text>
-                    <Text style={styles.year}>{record.translate}</Text>
+            <View>
+                <BaseActionBar navigator={this.props.navigator} title={'翻译记录'}/>
+                <View style={styles.container}>
+                    <Text>Loading data......</Text>
                 </View>
             </View>
         );
     }
 
+    renderRecord(record) {
 
+
+        return (
+            <TouchableHighlight onPress={this.pressRow(record)}>
+                <View style={styles.recordContainer}>
+                    <Text style={styles.word}>{record.word}</Text>
+                    <Text style={styles.translate}>{record.translate}</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
+    // 点击事件
+    pressRow(rowToast) {
+        console.log('rowToast->' + rowToast);
+        //ToastAndroid.show(rowToast, ToastAndroid.SHORT);
+    }
 }
-;
 
 
 var styles = StyleSheet.create({
@@ -114,23 +113,20 @@ var styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
-    rightContainer: {
-        flex: 1,
+    recordContainer: {
+        borderBottomColor: '#E9724C',
+        borderBottomWidth: 1,
+        width: width,
+        padding: 3
     },
-    title: {
-        fontSize: 20,
-        marginBottom: 8,
-        textAlign: 'center',
+    word: {
+        fontSize: 15,
     },
-    year: {
-        textAlign: 'center',
-    },
-    thumbnail: {
-        width: 53,
-        height: 81,
+    translate: {
+        width: width,
     },
     listView: {
-        paddingTop: 20,
+        padding: 5,
         backgroundColor: '#F5FCFF',
     },
 });

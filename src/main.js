@@ -11,7 +11,7 @@
 import React from 'react';
 var Dimensions = require('Dimensions');
 
-import Sider from './view/side_menu/sider';
+
 import SideMenu from './view/side_menu/SideMenu';
 
 import Utils from './util/Utils';
@@ -39,9 +39,10 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {input: '', value: 1, drawer: "close", offsetY: 0};
+        this.state = {translation: ''};
         this.navigator = this.props.navigator;
     }
+
 
     getValue(text) {
         this.closeDrawer();
@@ -60,8 +61,9 @@ class Main extends React.Component {
             var reslutJson = response.json();
             return reslutJson ? reslutJson : "";
         }).then(function (responseText) {
+            console.log('responseText-->' + responseText.translation);
             RootThis.setState({
-                input: responseText.translation
+                translation: responseText.translation
             });
             TRModel.addTranslateRecord(text, responseText.translation);
         });
@@ -116,7 +118,7 @@ class Main extends React.Component {
                         onChangeText={(text) => this.getValue(text)}
                     />
                     <Text style={styles.resultText}>
-                        {'翻译结果:' + this.state.input}
+                        {'翻译结果:' + this.state.translation }
                     </Text>
                 </View>
             </DrawerLayoutAndroid>
@@ -125,8 +127,6 @@ class Main extends React.Component {
 }
 
 
-
-//var {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
     //Main style start
     titleView: {
