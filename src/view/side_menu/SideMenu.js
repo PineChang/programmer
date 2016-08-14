@@ -21,12 +21,14 @@ import {
     Platform,
     Image,
     TouchableOpacity,
-    TouchableHighlight
+    TouchableHighlight,
+    NativeModules,
 } from 'react-native';
 
 var Dimensions, {height, width} = require('Dimensions');
 
 import UserInfo from '../user_center/UserInfo';
+import UserLogin from '../user_center/UserLogin';
 import AboutUs from '../user_center/AboutUs';
 import TranslationRecord from '../translate/TransLateRecord';
 
@@ -44,10 +46,10 @@ class SideMenu extends React.Component {
         return (
             <View style={styles.sideView}>
                 <View style={styles.sideHeader}>
-                    <Text style={{flex:1}}></Text>
-                    <Text style={{color:'#FFFFFF',fontSize:15}}>云翻译</Text>
-                    <Text style={{color:'#FFFFFF',fontSize:10}}>Version:0.1.0</Text>
-                    <Text style={{color:'#FFFFFF',fontSize:10,marginBottom: 20}}>————————————————</Text>
+                    <Text style={{flex: 1}}></Text>
+                    <Text style={{color: '#FFFFFF', fontSize: 15}}>云翻译</Text>
+                    <Text style={{color: '#FFFFFF', fontSize: 10}}>Version:0.1.0</Text>
+                    <Text style={{color: '#FFFFFF', fontSize: 10, marginBottom: 20}}>————————————————</Text>
                 </View>
                 <View style={styles.sideContent}>
                     <Menu navigator={this.props.navigator}
@@ -72,7 +74,7 @@ class Menu extends React.Component {
         return (<View>
 
             <TouchableHighlight style={styles.sideTouchAble} onPress={() => this._onIndexClick(this.props)}>
-                <Text style={[styles.sideMenu,{fontSize:18}]}>
+                <Text style={[styles.sideMenu, {fontSize: 18}]}>
                     首页
                 </Text>
             </TouchableHighlight>
@@ -100,12 +102,37 @@ class Menu extends React.Component {
 
     _onUserInfoClick(props) {
         this.props.closeDrawer();
-        if (props.navigator) {
+        // NativeModules.User.getUser(function (user) {
+        //     console.log('user:' + user);
+        // });
+        NativeModules.User.isLogin(function (isLogin) {
+            console.log('isLogin:' + isLogin);
+            var component;
+            if (isLogin) {
+                component = UserInfo;
+            } else {
+                component = UserLogin;
+            }
             props.navigator.push({
                 name: 'UserInfo',
-                component: UserInfo
-            })
-        }
+                component: component
+            });
+        });
+
+        // if (props.navigator) {
+        //
+        //     if (User) {
+        //         props.navigator.push({
+        //             name: 'UserInfo',
+        //             component: UserInfo
+        //         });
+        //     } else {
+        //         props.navigator.push({
+        //             name: 'UserInfo',
+        //             component: UserInfo
+        //         })
+        //     }
+        // }
     }
 
     _onIndexClick(props) {

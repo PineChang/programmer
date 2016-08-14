@@ -18,10 +18,11 @@ import {
     View,
     Text,
     Image,
-    TouchableHighlight
+    TouchableHighlight,
+    Dimensions,
 } from 'react-native';
 
-var Dimensions, {height, width} = require('Dimensions');
+var {height, width} = Dimensions.get('window');
 
 import Utils from '../../util/Utils';
 import BaseActionBar from '../public/BaseActionBar';
@@ -37,6 +38,7 @@ class TransLateRecord extends React.Component {
             }),
             loaded: false,
         };
+
     }
 
     componentDidMount() {
@@ -47,7 +49,7 @@ class TransLateRecord extends React.Component {
         fetch(Utils.LEANCLOUD_SERVCE + 'translate/TranslateRecord')
             .then((response) => response.json())
             .then((responseData) => {
-                console.log('responseData:' + JSON.stringify(responseData));
+                // console.log('responseData:' + JSON.stringify(responseData));
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(responseData.info),
                     loaded: true,
@@ -60,13 +62,18 @@ class TransLateRecord extends React.Component {
         if (!this.state.loaded) {
             return this.renderLoadingView();
         }
-
+        console.log('height:' + height + "<>width:" + width);
         return (
-            <View style={{flexDirection: 'column'}}>
+            <View style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                backgroundColor: '#F6F6F6',
+            }
+            }>
                 <BaseActionBar navigator={this.props.navigator} title={'翻译记录'}/>
                 <ListView
                     dataSource={this.state.dataSource}
-                    renderRow={this.renderRecord}
+                    renderRow={this.renderRecord.bind(this)}
                     style={styles.listView}
                 />
             </View>
@@ -85,10 +92,11 @@ class TransLateRecord extends React.Component {
     }
 
     renderRecord(record) {
-
-
         return (
-            <TouchableHighlight onPress={this.pressRow(record)}>
+            <TouchableHighlight onPress={() => {
+                this._pressRow(record.objectId);
+            }
+            }>
                 <View style={styles.recordContainer}>
                     <Text style={styles.word}>{record.word}</Text>
                     <Text style={styles.translate}>{record.translate}</Text>
@@ -98,10 +106,11 @@ class TransLateRecord extends React.Component {
     }
 
     // 点击事件
-    pressRow(rowToast) {
+    _pressRow(rowToast) {
         console.log('rowToast->' + rowToast);
         //ToastAndroid.show(rowToast, ToastAndroid.SHORT);
     }
+
 }
 
 
@@ -128,6 +137,7 @@ var styles = StyleSheet.create({
     listView: {
         padding: 5,
         backgroundColor: '#F5FCFF',
+        height: height - 50,
     },
 });
 

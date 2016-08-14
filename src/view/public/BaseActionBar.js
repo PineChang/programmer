@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F13D81',
         flexDirection: 'row',//子控件横向排列
         justifyContent: 'space-between',//子控件平均分配
+        height:45
     },
     titleText: {
         fontSize: 20,
