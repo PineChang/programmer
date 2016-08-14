@@ -11,17 +11,16 @@
 'use strict'; // 启用严格模式
 
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
     StyleSheet,
     Text,
     View,
     Image,
-    ScrollView,
     TouchableHighlight,
-    Animated,
     Picker,
+    NativeModules,
 } from 'react-native';
 
 import BaseActionBar from '../public/BaseActionBar';
@@ -31,10 +30,13 @@ class UserInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            progressValue: new Animated.Value(0)
+
         };
         var nav = this.props.navigator;
         console.log('UserInfo  nav:' + nav);
+        NativeModules.User.getUser(function (user) {
+            console.log('UserInfo  nav:' + user);
+        });
     }
 
     _onBackClick(props) {
