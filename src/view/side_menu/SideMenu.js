@@ -118,21 +118,6 @@ class Menu extends React.Component {
                 component: component
             });
         });
-
-        // if (props.navigator) {
-        //
-        //     if (User) {
-        //         props.navigator.push({
-        //             name: 'UserInfo',
-        //             component: UserInfo
-        //         });
-        //     } else {
-        //         props.navigator.push({
-        //             name: 'UserInfo',
-        //             component: UserInfo
-        //         })
-        //     }
-        // }
     }
 
     _onIndexClick(props) {
